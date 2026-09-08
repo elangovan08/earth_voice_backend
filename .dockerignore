@@ -1,0 +1,9 @@
+target/
+frontend/node_modules/
+frontend/dist/
+.env
+*.log
+hs_err_pid*.log
+replay_pid*.log
+uploads/
+.idea/

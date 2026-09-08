@@ -1,0 +1,15 @@
+target/
+*.class
+*.log
+
+.idea/
+*.iml
+
+.DS_Store
+out/
+logs/
+.env
+.backend-push*/
+node_modules/
+frontend/node_modules/
+frontend/dist/
