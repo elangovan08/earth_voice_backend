@@ -46,10 +46,12 @@ public class AdminAccountInitializer {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void enforceSingleAdmin() {
-        List<User> matchingUsers = userRepository.findByEmailIgnoreCaseOrderByIdAsc(adminEmail);
-        User designatedAdmin = matchingUsers.stream()
-                .min(Comparator.comparing(User::getId))
-                .orElse(null);
+        User designatedAdmin = userRepository.findByUsername(adminUsername).orElse(null);
+        if (designatedAdmin == null) {
+            designatedAdmin = userRepository.findByEmailIgnoreCaseOrderByIdAsc(adminEmail).stream()
+                    .min(Comparator.comparing(User::getId))
+                    .orElse(null);
+        }
 
         if (designatedAdmin == null) {
             if (!StringUtils.hasText(adminPassword)) {
@@ -65,12 +67,9 @@ public class AdminAccountInitializer {
         }
 
         if (designatedAdmin != null) {
-            User usernameOwner = userRepository.findByUsername(adminUsername).orElse(null);
-            if (usernameOwner != null && usernameOwner != designatedAdmin) {
-                throw new IllegalStateException("Administrator username is already used by another account: " + adminUsername);
-            }
             designatedAdmin.setUsername(adminUsername);
             designatedAdmin.setName(adminName);
+            designatedAdmin.setEmail(adminEmail);
             designatedAdmin.setRole("ADMIN");
             if (StringUtils.hasText(adminPassword)) {
                 designatedAdmin.setPassword(passwordEncoder.encode(adminPassword));
