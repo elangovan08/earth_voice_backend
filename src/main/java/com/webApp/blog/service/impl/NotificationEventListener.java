@@ -215,8 +215,8 @@ public class NotificationEventListener {
                 "COMMENT",
                 event.commenterUsername(),
                 event.commenterEmail(),
-                event.commentId(),
-                "COMMENT",
+                event.postId(),
+                "POST",
                 EmailNotification.withMessage(
                         "New Comment",
                         "New Comment",
