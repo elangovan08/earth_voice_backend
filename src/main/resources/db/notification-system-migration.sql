@@ -71,6 +71,29 @@ CREATE TABLE IF NOT EXISTS post_bookmarks (
 ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(255);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP(6);
 
+-- Keep exactly one administrator: the designated account, when it exists.
+UPDATE users
+SET role = 'POSTER'
+WHERE UPPER(COALESCE(role, '')) = 'ADMIN'
+    AND LOWER(email) <> LOWER('elangovandev27@gmail.com');
+
+UPDATE users
+SET role = 'POSTER'
+WHERE LOWER(email) = LOWER('elangovandev27@gmail.com')
+    AND id <> (
+            SELECT MIN(id)
+            FROM users
+            WHERE LOWER(email) = LOWER('elangovandev27@gmail.com')
+    );
+
+UPDATE users
+SET name = 'Elangovan', role = 'ADMIN'
+WHERE id = (
+        SELECT MIN(id)
+        FROM users
+        WHERE LOWER(email) = LOWER('elangovandev27@gmail.com')
+);
+
 CREATE INDEX IF NOT EXISTS idx_notification_created_at
     ON notification (created_at);
 
