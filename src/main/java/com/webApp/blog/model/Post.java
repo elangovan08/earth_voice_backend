@@ -48,7 +48,7 @@ public class Post {
     // ================= Image Path =================
     // ================= Like Count =================
     @Column(name = "like_count")
-    private int likeCount = 0;
+    private Integer likeCount = 0;
 
     @Formula("(select count(*) from post_bookmarks pb where pb.post_id = id)")
     private int bookmarkCount;
@@ -155,7 +155,7 @@ public class Post {
     }
 
     public int getLikeCount() {
-        return likeCount;
+        return likeCount == null ? 0 : likeCount;
     }
 
     public void setLikeCount(int likeCount) {

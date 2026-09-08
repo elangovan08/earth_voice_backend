@@ -71,6 +71,10 @@ CREATE TABLE IF NOT EXISTS post_bookmarks (
 ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(255);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP(6);
 
+UPDATE post
+SET like_count = 0
+WHERE like_count IS NULL;
+
 -- Keep exactly one administrator: the designated account, when it exists.
 UPDATE users
 SET role = 'POSTER'
