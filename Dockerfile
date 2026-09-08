@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.9.10-eclipse-temurin-25 AS build
+FROM maven:3.9.10-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Run stage
-FROM eclipse-temurin:25-jdk
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
