@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.HtmlUtils;
 import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
 
 import java.time.format.DateTimeFormatter;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +44,17 @@ public class EmailServiceImpl implements EmailService {
         this.mailProperties = mailPropertiesProvider.getIfAvailable(MailProperties::new);
         this.notificationProperties = notificationProperties;
         this.siteUrl = siteUrl;
+    }
+
+    @PostConstruct
+    void logMailConfiguration() {
+        logger.info(
+                "Email notifications enabled={}, recipient='{}', SMTP username configured={}, SMTP password configured={}",
+                notificationProperties.isEnabled(),
+                notificationProperties.getRecipient(),
+                StringUtils.hasText(mailProperties.getUsername()),
+                StringUtils.hasText(mailProperties.getPassword())
+        );
     }
 
     @Override
